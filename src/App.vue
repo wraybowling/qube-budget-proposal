@@ -1,17 +1,44 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <QubeSchedule
+    v-for="(schedule, index) in schedules"
+    :key="index"
+    :schedule="schedule"
+    @update:schedule="updateSchedule(index, $event)"
+  />
+  <button @click="addSchedule">Add Schedule</button>
+  <p>Budget: {{ sum }}</p>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import QubeSchedule from "./components/QubeSchedule.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    QubeSchedule,
+  },
+  data() {
+    return {
+      schedules: [{ amount: 0, frequency: 12 }],
+    };
+  },
+  methods: {
+    addSchedule() {
+      this.schedules.push({ amount: 0, frequency: 12 });
+    },
+    updateSchedule(index, schedule) {
+      this.schedules[index] = schedule;
+    },
+  },
+  computed: {
+    sum() {
+      return this.schedules.reduce(
+        (acc, schedule) => acc + (schedule.amount * schedule.frequency) / 12,
+        0
+      );
+    },
+  },
+};
 </script>
 
 <style>
